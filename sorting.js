@@ -54,8 +54,49 @@ function ArrayList () {
     }
 
     //3.插入排序
+    ArrayList.prototype.insertionSort = function () {
+        var length = this.array.length;
+
+        //外层循环: 从第二位开始获取数据, 向前面进行局部有序插入
+        for (var i = 1; i < length; i++) {
+            //内层循环: 获取 i 位置的元素, 前面的数据进行依次比较
+            var temp = this.array[i];
+            var j = i;
+            while (this.array[j - 1] > temp && j > 0) {
+                this.array[j] = this.array[j - 1]; 
+                j--;    //如果循环继续下去, j 会不断变小
+            }
+            //将减小后的 j 位置的数据放置 temp
+            this.array[j] = temp;
+        }
+    }
 
     //4.希尔排序
+    ArrayList.prototype.shellSort = function () {
+        var length = this.array.length;
+
+        //初始化增量
+        var gap = Math.floor(length / 2);
+
+        //循环使 gap 不断减小
+        while (gap >= 1) {
+            //以 gap 作为分隔进行分组, 再对每一个分组进行插入排序
+            for (var i = gap; i < length; i++) {
+                var temp = this.array[i];
+                var j = i;
+                while (this.array[j - gap] >temp && j > gap - 1) {
+                    this.array[j] = this.array[j - gap];
+                    j -= gap;
+                }
+
+                //将 j 位置的元素赋值给 temp
+                this.array[j] = temp;
+            }
+
+            //增量变化
+            gap = Math.floor(gap / 2);
+        }
+    }
 
     //5.快速排序
 }
@@ -70,8 +111,10 @@ list.insert(23);
 console.log(list);
 console.log(list.toString());
 
-list.selectionSort();
+list.shellSort();
 console.log(list);
+// list.selectionSort();
+// console.log(list);
 
-list.bubbleSorts();
-console.log(list);
+// list.bubbleSorts();
+// console.log(list);
