@@ -23,7 +23,7 @@ function ArrayList () {
 
     //实现排序算法
     //1.冒泡排序
-    ArrayList.prototype.bubblesorts = function () {
+    ArrayList.prototype.bubbleSorts = function () {
         var length = this.array.length;
 
         for (var j = length - 1; j >=0; j--) {    //从最后一个数开始排序
@@ -34,7 +34,24 @@ function ArrayList () {
             }
         }
     }
+
     //2.选择排序
+    ArrayList.prototype.selectionSort  = function () {
+        var length = this.array.length;
+
+        //外层循环, 从 0 开始, 让数组中的每个位置都变成最小值
+        for (var j = 0; j < length - 1; j++) {
+            var min = j;  //记录最小值的下标
+            //内层循环: 比较出最小值
+            for (var i = min + 1; i < length; i++) {
+                if (this.array[min] > this.array[i]) {
+                    min = i;
+                }
+            }
+    
+            this.swap(min, j);
+        }
+    }
 
     //3.插入排序
 
@@ -53,5 +70,8 @@ list.insert(23);
 console.log(list);
 console.log(list.toString());
 
-list.bubblesorts();
+list.selectionSort();
+console.log(list);
+
+list.bubbleSorts();
 console.log(list);
