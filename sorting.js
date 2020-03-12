@@ -1,5 +1,5 @@
 //创建列表类
-function ArrayList () {
+function ArrayList() {
     //属性
     this.array = [];
 
@@ -26,29 +26,29 @@ function ArrayList () {
     ArrayList.prototype.bubbleSorts = function () {
         var length = this.array.length;
 
-        for (var j = length - 1; j >=0; j--) {    //从最后一个数开始排序
+        for (var j = length - 1; j >= 0; j--) { //从最后一个数开始排序
             for (var i = 0; i < j; i++) {
-                if (this.array[i] > this.array[i+1]) {
-                    this.swap(i, i+1);
+                if (this.array[i] > this.array[i + 1]) {
+                    this.swap(i, i + 1);
                 }
             }
         }
     }
 
     //2.选择排序
-    ArrayList.prototype.selectionSort  = function () {
+    ArrayList.prototype.selectionSort = function () {
         var length = this.array.length;
 
         //外层循环, 从 0 开始, 让数组中的每个位置都变成最小值
         for (var j = 0; j < length - 1; j++) {
-            var min = j;  //记录最小值的下标
+            var min = j; //记录最小值的下标
             //内层循环: 比较出最小值
             for (var i = min + 1; i < length; i++) {
                 if (this.array[min] > this.array[i]) {
                     min = i;
                 }
             }
-    
+
             this.swap(min, j);
         }
     }
@@ -63,8 +63,8 @@ function ArrayList () {
             var temp = this.array[i];
             var j = i;
             while (this.array[j - 1] > temp && j > 0) {
-                this.array[j] = this.array[j - 1]; 
-                j--;    //如果循环继续下去, j 会不断变小
+                this.array[j] = this.array[j - 1];
+                j--; //如果循环继续下去, j 会不断变小
             }
             //将减小后的 j 位置的数据放置 temp
             this.array[j] = temp;
@@ -84,7 +84,7 @@ function ArrayList () {
             for (var i = gap; i < length; i++) {
                 var temp = this.array[i];
                 var j = i;
-                while (this.array[j - gap] >temp && j > gap - 1) {
+                while (this.array[j - gap] > temp && j > gap - 1) {
                     this.array[j] = this.array[j - gap];
                     j -= gap;
                 }
@@ -99,22 +99,116 @@ function ArrayList () {
     }
 
     //5.快速排序
+    //1.选择枢纽
+    ArrayList.prototype.median = function (left, right) {
+        //1.取出中间位置
+        var center = Math.floor((left + right) / 2);
+
+        //2.判断大小并且进行交换
+        if (this.array[left] > this.array[center]) {
+            this.swap(left, center);
+        }
+        if (this.array[center] > this.array[right]) {
+            this.swap(center, right);
+        }
+        if (this.array[left] > this.array[center]) {
+            this.swap(left, center);
+        }
+
+        //3.将 center 换到 right - 1 的位置
+        this.swap(center, right - 1);
+
+        return this.array[right - 1];
+    }
+
+    //2.实现快排: 外部函数
+    ArrayList.prototype.quickSort = function () {
+        this.quick(0, this.array.length - 1);
+    }
+
+    //内部递归函数
+    ArrayList.prototype.quick = function (left, right) {
+        //1.结束条件
+        if (left >= right - 1) {
+            return;
+        }
+
+        //2.获取枢纽
+        var pivot = this.median(left, right);
+
+        //3.定义指针
+        var i = left;
+        var j = right - 1;
+
+        //4.依次寻找并交换
+        while (true) {
+            while (this.array[++i] < pivot) {}
+            while (this.array[--j] > pivot) {}
+            if (i < j) {
+                this.swap(i, j);
+            } else {
+                break;
+            }
+        }
+
+        //5.将枢纽放到 i 的位置
+        this.swap(i, right - 1);
+        // console.log(this.array);
+
+        //6.递归调用
+        this.quick(left, i - 1); //递归调用左边
+        this.quick(i + 1, right); //递归调用右边
+    }
 }
 
 var list = new ArrayList();
-list.insert(123);
-list.insert(45);
-list.insert(999);
-list.insert(1);
-list.insert(5);
-list.insert(23);
-console.log(list);
-console.log(list.toString());
 
-list.shellSort();
-console.log(list);
-// list.selectionSort();
-// console.log(list);
+//快速排序
+var arr = [3, 4, 2, 6, 5, 8, 9, 10, 16, 13]; // length = 10
+function quickSort(arr) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+    //     基准值
+    var pivot = arr[Math.floor(arr.length / 2)];
+    arr.splice(arr.indexOf(pivot), 1);
+    var left = [];
+    var right = [];
+    for (var i = 0; i < arr.length; i++) {
 
-// list.bubbleSorts();
-// console.log(list);
+        if (arr[i] < pivot) {
+            left.push(arr[i]);
+        } else {
+            right.push(arr[i]);
+        }
+
+    }
+    return quickSort(left).concat([pivot], quickSort(right));
+
+}
+
+console.log(quickSort(arr));
+
+
+//不使用递归的快排
+function quickSort(arr) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+    //基准值
+    var pivot = arr[Math.floor(arr.length / 2)];
+    arr.splice(arr.indexOf(pivot), 1);
+    var left = [];
+    var right = [];
+    for (var i = 0; i < arr.length; i++) {
+
+        if (arr[i] < pivot) {
+            left.push(arr[i]);
+        } else {
+            right.push(arr[i]);
+        }
+
+    }
+    return quickSort(left).concat([pivot], quickSort(right));
+
+}
