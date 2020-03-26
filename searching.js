@@ -2,7 +2,7 @@
 function Find(target, array) {
     let i = array.length - 1; // y坐标
     let j = 0; // x坐标
-    return compare(target, array, i, j);
+    return compare(target, array, i, j)
 }
 
 function compare(target, array, i, j) {
